@@ -1,5 +1,7 @@
+package operator_example
+
 import org.apache.flink.api.java.utils.ParameterTool
-import org.apache.flink.api.scala._
+import org.apache.flink.api.scala.{DataSet, ExecutionEnvironment}
 
 object JoinExample extends App {
   val env = ExecutionEnvironment.getExecutionEnvironment

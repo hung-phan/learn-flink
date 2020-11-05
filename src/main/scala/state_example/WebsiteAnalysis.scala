@@ -1,4 +1,5 @@
-import org.apache.flink.api.scala._
+package state_example
+
 import org.apache.flink.streaming.api.TimeCharacteristic
 import org.apache.flink.streaming.api.scala.StreamExecutionEnvironment
 import org.apache.flink.streaming.api.windowing.assigners.TumblingEventTimeWindows
@@ -47,7 +48,9 @@ object WebsiteAnalysis extends App {
     }
   }
 
-  val stream = text.map { IPData(_) }
+  val stream = text.map {
+    IPData(_)
+  }
 
   val totalClicksGroupedByWebsite = stream
     .map { ipData => (ipData.website, 1) }

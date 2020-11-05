@@ -1,4 +1,5 @@
-import org.apache.flink.api.scala._
+package window_example
+
 import org.apache.flink.streaming.api.TimeCharacteristic
 import org.apache.flink.streaming.api.scala.StreamExecutionEnvironment
 import org.apache.flink.streaming.api.windowing.assigners.TumblingProcessingTimeWindows

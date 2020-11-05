@@ -1,4 +1,5 @@
-import org.apache.flink.api.scala._
+package operator_example
+
 import org.apache.flink.streaming.api.scala.{
   DataStream,
   StreamExecutionEnvironment

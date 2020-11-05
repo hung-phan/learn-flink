@@ -1,5 +1,7 @@
+package operator_example
+
 import org.apache.flink.api.java.utils.ParameterTool
-import org.apache.flink.api.scala._
+import org.apache.flink.api.scala.ExecutionEnvironment
 
 object WordCount extends App {
   // set up the execution environment
@@ -13,7 +15,7 @@ object WordCount extends App {
     "To be, or not to be,--that is the question:--",
     "Whether 'tis nobler in the mind to suffer",
     "The slings and arrows of outrageous fortune",
-    "Or to take arms against a sea of troubles,",
+    "Or to take arms against a sea of troubles,"
   )
 
   val counts = text

@@ -1,4 +1,6 @@
-import org.apache.flink.api.scala._
+package operator_example
+
+import org.apache.flink.api.scala.ExecutionEnvironment
 
 object CabAssignment extends App {
   // set up the execution environment

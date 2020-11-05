@@ -1,7 +1,12 @@
+package state_example
+
 import org.apache.flink.api.common.restartstrategy.RestartStrategies
 import org.apache.flink.api.common.state.{ListState, ListStateDescriptor}
 import org.apache.flink.api.common.typeinfo.{TypeHint, TypeInformation}
-import org.apache.flink.runtime.state.{FunctionInitializationContext, FunctionSnapshotContext}
+import org.apache.flink.runtime.state.{
+  FunctionInitializationContext,
+  FunctionSnapshotContext
+}
 import org.apache.flink.streaming.api.CheckpointingMode
 import org.apache.flink.streaming.api.checkpoint.CheckpointedFunction
 import org.apache.flink.streaming.api.environment.CheckpointConfig.ExternalizedCheckpointCleanup
@@ -11,6 +16,7 @@ import org.apache.flink.streaming.api.functions.sink.SinkFunction
 import scala.collection.mutable.ArrayBuffer
 
 object StateSinkDemo extends App {
+
   class Sink(val threshold: Int)
       extends SinkFunction[(String, Int)]
       with CheckpointedFunction {
@@ -82,13 +88,17 @@ object StateSinkDemo extends App {
   checkpointConfig.setCheckpointTimeout(10000)
 
   // set mode to exactly-once (this is the default)
-  checkpointConfig.setCheckpointingMode(CheckpointingMode.EXACTLY_ONCE) // AT_LEAST_ONCE
+  checkpointConfig.setCheckpointingMode(
+    CheckpointingMode.EXACTLY_ONCE
+  ) // AT_LEAST_ONCE
 
   // allow ony one checkpoint to be in progress at the same time
   checkpointConfig.setMaxConcurrentCheckpoints(1)
 
   // enable externalized checkpoints which are retained after job cancellation
-  checkpointConfig.enableExternalizedCheckpoints(ExternalizedCheckpointCleanup.RETAIN_ON_CANCELLATION) // DELETE_ON_CANCELLATION
+  checkpointConfig.enableExternalizedCheckpoints(
+    ExternalizedCheckpointCleanup.RETAIN_ON_CANCELLATION
+  ) // DELETE_ON_CANCELLATION
 
   // number of restart attempts, delay between attempts
   env.setRestartStrategy(RestartStrategies.fixedDelayRestart(3, 10))

@@ -1,5 +1,6 @@
+package operator_example
+
 import org.apache.flink.api.java.utils.ParameterTool
-import org.apache.flink.api.scala._
 import org.apache.flink.streaming.api.scala.StreamExecutionEnvironment
 
 object WordCountStream extends App {
