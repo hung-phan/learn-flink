@@ -1,9 +1,7 @@
 package operator_example
 
-import org.apache.flink.streaming.api.scala.{
-  DataStream,
-  StreamExecutionEnvironment
-}
+import org.apache.flink.api.scala._
+import org.apache.flink.streaming.api.scala.{DataStream, StreamExecutionEnvironment}
 
 object Iteration extends App {
   val env = StreamExecutionEnvironment.getExecutionEnvironment

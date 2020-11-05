@@ -2,13 +2,11 @@ package operator_example
 
 import org.apache.flink.api.common.serialization.SimpleStringEncoder
 import org.apache.flink.api.java.utils.ParameterTool
+import org.apache.flink.api.scala._
 import org.apache.flink.core.fs.Path
 import org.apache.flink.streaming.api.functions.ProcessFunction
 import org.apache.flink.streaming.api.functions.sink.filesystem.StreamingFileSink
-import org.apache.flink.streaming.api.scala.{
-  OutputTag,
-  StreamExecutionEnvironment
-}
+import org.apache.flink.streaming.api.scala.{OutputTag, StreamExecutionEnvironment}
 import org.apache.flink.util.Collector
 
 object SplitDemo extends App {

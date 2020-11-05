@@ -3,11 +3,23 @@ package state_example
 import org.apache.flink.api.common.functions.RichFlatMapFunction
 import org.apache.flink.api.common.state.{ValueState, ValueStateDescriptor}
 import org.apache.flink.api.common.typeinfo.{TypeHint, TypeInformation}
+import org.apache.flink.api.scala._
 import org.apache.flink.configuration.Configuration
 import org.apache.flink.streaming.api.scala.StreamExecutionEnvironment
 import org.apache.flink.util.Collector
 
 object StateDemo extends App {
+  val env = StreamExecutionEnvironment.getExecutionEnvironment
+  val data = env.socketTextStream("localhost", 9090)
+  val sum = data
+    .map { input =>
+      val words = input.split(",")
+
+      (words(0).toLong, words(1))
+    }
+    .keyBy(0)
+    .flatMap(new StatefulMap())
+
   class StatefulMap(var sum: ValueState[Long], var count: ValueState[Long])
       extends RichFlatMapFunction[(Long, String), Long] {
 
@@ -43,18 +55,6 @@ object StateDemo extends App {
       )
     }
   }
-
-  val env = StreamExecutionEnvironment.getExecutionEnvironment
-  val data = env.socketTextStream("localhost", 9090)
-
-  val sum = data
-    .map { input =>
-      val words = input.split(",")
-
-      (words(0).toLong, words(1))
-    }
-    .keyBy(0)
-    .flatMap(new StatefulMap())
 
   sum.writeAsText("tmp/state_demo")
 

@@ -3,10 +3,7 @@ package state_example
 import org.apache.flink.api.common.restartstrategy.RestartStrategies
 import org.apache.flink.api.common.state.{ListState, ListStateDescriptor}
 import org.apache.flink.api.common.typeinfo.{TypeHint, TypeInformation}
-import org.apache.flink.runtime.state.{
-  FunctionInitializationContext,
-  FunctionSnapshotContext
-}
+import org.apache.flink.runtime.state.{FunctionInitializationContext, FunctionSnapshotContext}
 import org.apache.flink.streaming.api.CheckpointingMode
 import org.apache.flink.streaming.api.checkpoint.CheckpointedFunction
 import org.apache.flink.streaming.api.environment.CheckpointConfig.ExternalizedCheckpointCleanup
@@ -17,12 +14,17 @@ import scala.collection.mutable.ArrayBuffer
 
 object StateSinkDemo extends App {
 
+  val env = StreamExecutionEnvironment.getExecutionEnvironment()
+  val checkpointConfig = env.getCheckpointConfig()
+
+  // start a checkpoint every 1000 ms
+  env.enableCheckpointing(1000)
+
   class Sink(val threshold: Int)
       extends SinkFunction[(String, Int)]
       with CheckpointedFunction {
-    @transient var checkPointedState: Option[ListState[(String, Int)]] = None
-
     private val bufferedElements = ArrayBuffer[(String, Int)]()
+    @transient var checkPointedState: Option[ListState[(String, Int)]] = None
 
     @throws(classOf[Exception])
     def invoke(
@@ -73,13 +75,6 @@ object StateSinkDemo extends App {
       }
     }
   }
-
-  val env = StreamExecutionEnvironment.getExecutionEnvironment()
-
-  // start a checkpoint every 1000 ms
-  env.enableCheckpointing(1000)
-
-  val checkpointConfig = env.getCheckpointConfig()
 
   // to set minimum progress time to happen between checkpoints
   checkpointConfig.setMinPauseBetweenCheckpoints(500)

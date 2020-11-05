@@ -1,6 +1,6 @@
 package operator_example
 
-import org.apache.flink.api.scala.ExecutionEnvironment
+import org.apache.flink.api.scala.{ExecutionEnvironment, _}
 
 object CabAssignment extends App {
   // set up the execution environment
