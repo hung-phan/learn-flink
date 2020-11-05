@@ -2,9 +2,12 @@ package state_example
 
 import org.apache.flink.api.common.state.{MapStateDescriptor, ValueState, ValueStateDescriptor}
 import org.apache.flink.api.common.typeinfo.{TypeHint, TypeInformation}
+import org.apache.flink.api.scala._
 import org.apache.flink.configuration.Configuration
-import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment
 import org.apache.flink.streaming.api.functions.co.KeyedBroadcastProcessFunction
+import org.apache.flink.streaming.api.scala.StreamExecutionEnvironment
+import org.apache.flink.streaming.api.windowing.assigners.TumblingEventTimeWindows
+import org.apache.flink.streaming.api.windowing.time.Time
 import org.apache.flink.util.Collector
 
 import scala.collection.JavaConverters.iterableAsScalaIterableConverter
@@ -19,10 +22,10 @@ object BroadcastState extends App {
   val excludeEmp = env.socketTextStream("localhost", 9090)
   val excludeEmpBroadcast = excludeEmp.broadcast(excludeEmpDescriptor)
   val employees = env
-    .readTextFile(getClass().getResource("broadcast.txt").getPath)
-    .map { row =>
-      (row.split(",")(3), row)
-    }
+    .readTextFile(
+      getClass.getResource("/state_example/broadcast.txt").getPath
+    )
+    .map { row => (row.split(",")(3), row) }
     .keyBy(0)
     .connect(excludeEmpBroadcast)
     .process(new ExcludeEmp())
@@ -91,5 +94,5 @@ object BroadcastState extends App {
 
   employees.writeAsText("tmp/broadcast")
 
-  env.execute("Broadcast Exmaple")
+  env.execute("Broadcast Example")
 }

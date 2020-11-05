@@ -14,7 +14,7 @@ object DummyServer extends App {
     println(s"Got new connection: $socket")
 
     br = new BufferedReader(
-      new FileReader(getClass().getResource("broadcast_small").getPath)
+      new FileReader(getClass.getResource("/state_example/broadcast_small").getPath)
     )
 
     try {
