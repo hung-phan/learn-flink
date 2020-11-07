@@ -11,6 +11,7 @@ lazy val root = (project in file("."))
       libraryDependencies ++= Seq(
         "org.apache.flink" %% "flink-scala" % flinkVersion,
         "org.apache.flink" %% "flink-streaming-scala" % flinkVersion,
+        "org.apache.flink" %% "flink-connector-kafka" % "1.11.2",
         "org.scala-lang.modules" %% "scala-java8-compat" % "0.9.1"
       )
     )
