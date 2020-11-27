@@ -1,8 +1,8 @@
 package table_and_sql
 
-import org.apache.flink.api.scala.{ExecutionEnvironment, _}
-import org.apache.flink.table.api.bridge.scala.BatchTableEnvironment
-import org.apache.flink.table.api.{DataTypes, FieldExpression}
+import org.apache.flink.api.scala._
+import org.apache.flink.table.api._
+import org.apache.flink.table.api.bridge.scala._
 import org.apache.flink.table.sources.CsvTableSource
 
 object TableApiSample extends App {
@@ -25,11 +25,11 @@ object TableApiSample extends App {
     * query with table API
     */
   val category5Profit = tableEnv
-    .scan("CatalogTable")
-    .filter("catalog === 'Category5'")
+    .from("CatalogTable")
+    .filter($"catalog" === "'Category5'")
     .groupBy($"month")
-    .select("month, profit.sum as sum")
-    .orderBy("sum")
+    .select($"month", $"profit".sum as "sum")
+    .orderBy($"sum")
 
   val category5ProfitSet = tableEnv.toDataSet[(String, Int)](category5Profit)
   category5ProfitSet.writeAsText("/path/to/file")
@@ -39,7 +39,8 @@ object TableApiSample extends App {
     "SELECT `month`, SUM(profit) as sum1 FROM CatalogTable WHERE category = 'Category5' GROUP BY `month` ORDER BY sum1"
   )
 
-  val newCategory5ProfitSet = tableEnv.toDataSet[(String, Int)](newCategory5Profit)
+  val newCategory5ProfitSet =
+    tableEnv.toDataSet[(String, Int)](newCategory5Profit)
   newCategory5ProfitSet.writeAsText("/path/to/file")
 
   env.execute("TableApiExample")
